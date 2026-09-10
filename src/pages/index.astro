@@ -1,17 +1,28 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout title="WebAR — Image Target Demo">
+  <!-- Full-screen canvas where 8th Wall renders the camera feed + Three.js scene -->
+  <div id="ar-canvas-container">
+    <canvas id="ar-canvas"></canvas>
+  </div>
+
+  <!-- Loading overlay — hidden once camera is active -->
+  <div id="ar-loading-overlay">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">
+      Solicitando permiso de cámara…<br />
+      Apunta a la imagen objetivo cuando esté listo.
+    </p>
+  </div>
+
+  <!-- Optional status toast -->
+  <div id="ar-status"></div>
+
+  <!-- Client-only AR experience (TypeScript) -->
+  <script>
+    import '../scripts/ar-experience.ts';
+  </script>
+</Layout>
