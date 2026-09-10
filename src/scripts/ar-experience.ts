@@ -70,19 +70,16 @@ function showStatus(msg: string, durationMs = 3000) {
   if (!statusEl) return;
   statusEl.textContent = msg;
   statusEl.classList.add('visible');
-  console.log(`[AR-Status] ${msg}`);
   if (durationMs > 0) {
     setTimeout(() => statusEl.classList.remove('visible'), durationMs);
   }
 }
 
 function hideOverlay() {
-  console.log('[AR] Hiding overlay');
   overlay?.classList.add('hidden');
 }
 
 function showError(msg: string) {
-  console.error(`[AR-Error] ${msg}`);
   if (!overlay) return;
   const spinner = overlay.querySelector('.loading-spinner');
   if (spinner) spinner.remove();
@@ -101,7 +98,6 @@ function setupCanvas(): () => void {
   const resize = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    console.log(`[AR] Canvas resized to ${canvas.width}x${canvas.height}`);
   };
   resize();
 
@@ -118,8 +114,6 @@ let isCubeVisible = false;
 function createCube(scene: THREE.Scene) {
   if (cube) return;
 
-  console.log('[AR] Creating cube in scene');
-
   // Geometry + material
   const geometry = new THREE.BoxGeometry(0.15, 0.15, 0.15);
   const material = new THREE.MeshStandardMaterial({
@@ -129,7 +123,6 @@ function createCube(scene: THREE.Scene) {
   });
   cube = new THREE.Mesh(geometry, material);
   cube.position.set(0, 0.075, 0);
-  cube.visible = false;
   scene.add(cube);
 
   // Lighting
@@ -139,14 +132,15 @@ function createCube(scene: THREE.Scene) {
   const dir = new THREE.DirectionalLight(0xffffff, 1.0);
   dir.position.set(0.5, 1, 0.5);
   scene.add(dir);
-
-  console.log('[AR] Cube created and added to scene');
 }
 
 /* -----------------------------------------------------------
    Custom pipeline module — scene visibility & animation.
-   Registered via XR8.addPipelineModules() in initAR().
+   This module is added via XR8.addPipelineModules() inside
+   the onAttach callback, so it runs AFTER the Threejs
+   pipeline module has set up the scene.
    ----------------------------------------------------------- */
+let xrEngine: any = null;
 let cubeAdded = false;
 
 function createImageTargetPipeline(): PipelineModule {
@@ -154,11 +148,13 @@ function createImageTargetPipeline(): PipelineModule {
     name: 'image-target-cube',
 
     onAttach(engine: any) {
-      console.log('[AR-Pipeline] onAttach called');
+      xrEngine = engine;
+      // Add our module to the engine's active pipeline
+      engine.addPipelineModules([createImageTargetPipeline()]);
     },
 
     onDetach() {
-      console.log('[AR-Pipeline] onDetach called');
+      xrEngine = null;
     },
 
     onUpdate({ frameTime }: { frameTime: number }) {
@@ -174,28 +170,18 @@ function createImageTargetPipeline(): PipelineModule {
 /* -----------------------------------------------------------
    Image target callbacks
    ----------------------------------------------------------- */
-function onImageFound(evt: any) {
-  console.log('[AR] onImageFound triggered', evt);
-
+function onImageFound() {
   if (!cubeAdded) {
-    try {
-      const scene = XR8.Threejs.xrScene();
-      console.log('[AR] Got XR scene, creating cube');
-      createCube(scene);
-      cubeAdded = true;
-    } catch (err) {
-      console.error('[AR] Error getting XR scene:', err);
-    }
+    const scene = XR8.Threejs.xrScene();
+    createCube(scene);
+    cubeAdded = true;
   }
-
   isCubeVisible = true;
   if (cube) cube.visible = true;
   showStatus('¡Marcador detectado!');
-  hideOverlay();
 }
 
-function onImageLost(evt: any) {
-  console.log('[AR] onImageLost triggered', evt);
+function onImageLost() {
   isCubeVisible = false;
   if (cube) cube.visible = false;
   showStatus('Apunta a la imagen objetivo');
@@ -256,8 +242,6 @@ async function requestDeviceOrientationPermission() {
    Bootstrap
    ----------------------------------------------------------- */
 async function initAR() {
-  console.log('[AR] initAR called');
-
   if (typeof XR8 === 'undefined') {
     console.error('[AR] XR8 engine not found. Is the CDN script loaded?');
     showError('Error: motor 8th Wall no encontrado.');
@@ -273,20 +257,13 @@ async function initAR() {
   setupCanvas();
 
   // Register the camera pipeline modules
-  console.log('[AR] Registering camera pipeline modules');
   XR8.addCameraPipelineModules([
     XR8.GlTextureRenderer.pipelineModule(),
     XR8.Threejs.pipelineModule(),
     XR8.XrController.pipelineModule(),
   ]);
 
-  // Register custom pipeline module for cube animation
-  const imageTargetPipeline = createImageTargetPipeline();
-  console.log('[AR] Registering custom pipeline module');
-  XR8.addPipelineModules([imageTargetPipeline]);
-
   // Configure image target tracking
-  console.log('[AR] Configuring image target data');
   XR8.XrController.configure({
     imageTargetData: [
       {
@@ -312,20 +289,12 @@ async function initAR() {
       // Request deviceorientation permission (required on iOS/Safari)
       await requestDeviceOrientationPermission();
 
-      console.log('[AR] Calling XR8.run()');
       // Start the XR8 session
       XR8.run({
         canvas,
         allowedDevices: XR8.XrConfig.device().ANY,
         cameraConfig: { direction: XR8.XrConfig.camera().BACK },
         onError: onXrError,
-        onCameraStatusChange: (evt: any) => {
-          console.log('[AR] Camera status:', evt);
-          if (evt.status === 'normal') {
-            hideOverlay();
-            showStatus('Cámara activa — apunta a la imagen');
-          }
-        },
       });
     }, { once: true });
   }
@@ -335,7 +304,6 @@ async function initAR() {
    Wait for 8th Wall engine load, then initialize
    ----------------------------------------------------------- */
 function onXrLoaded() {
-  console.log('[AR] XR8 loaded');
   initAR();
 }
 
