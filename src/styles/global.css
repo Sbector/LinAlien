@@ -98,3 +98,21 @@ body {
 #ar-status.visible {
   opacity: 1;
 }
+
+/* Start Button ------------------------------------------------ */
+.ar-start-btn {
+  margin-top: 1.5rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: #0066ff;
+  border: none;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.ar-start-btn:hover {
+  background: #0052cc;
+}

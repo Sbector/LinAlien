@@ -5,27 +5,52 @@
 import * as THREE from 'three';
 
 /* -----------------------------------------------------------
-   Global XR8 types injected by the 8th Wall CDN script.
-   We declare them here so TypeScript doesn't complain.
+   Expose THREE globally — required by 8th Wall's Threejs
+   pipeline module (loaded via CDN before this script runs).
    ----------------------------------------------------------- */
+(window as any).THREE = THREE;
+
+/* -----------------------------------------------------------
+   Constants
+   ----------------------------------------------------------- */
+/** Physical width of the image target in metres (adjust to your print size) */
+const TARGET_PHYSICAL_WIDTH = 0.2;
+
+/* -----------------------------------------------------------
+   Global type declarations for 8th Wall (injected via CDN).
+   ----------------------------------------------------------- */
+interface PipelineModule {
+  name?: string;
+  onAttach?: (engine: any) => void;
+  onDetach?: () => void;
+  onStart?: () => void;
+  onEnd?: () => void;
+  onUpdate?: (args: { frameTime: number }) => void;
+}
+
 declare global {
   interface Window {
-    XR8: typeof XR8;
+    XR8: any;
+    THREE: typeof THREE;
+    DeviceOrientationEvent: any;
   }
 
   const XR8: {
-    GlTextureRenderer: {
-      pipelineModule: () => Record<string, unknown>;
-    };
+    GlTextureRenderer: { pipelineModule: () => PipelineModule };
     Threejs: {
-      pipelineModule: () => Record<string, unknown>;
+      pipelineModule: () => PipelineModule;
       xrScene: () => THREE.Scene;
     };
     XrController: {
-      pipelineModule: () => Record<string, unknown>;
+      pipelineModule: () => PipelineModule;
       configure: (config: Record<string, unknown>) => void;
     };
-    addCameraPipelineModules: (modules: Record<string, unknown>[]) => void;
+    XrConfig: {
+      device: () => { ANY: symbol };
+      camera: () => { BACK: symbol };
+    };
+    addCameraPipelineModules: (modules: PipelineModule[]) => void;
+    addPipelineModules: (modules: PipelineModule[]) => void;
     run: (config: Record<string, unknown>) => void;
     stop: () => void;
   };
@@ -36,6 +61,7 @@ declare global {
    ----------------------------------------------------------- */
 const overlay = document.getElementById('ar-loading-overlay') as HTMLElement | null;
 const statusEl = document.getElementById('ar-status') as HTMLElement | null;
+const canvas = document.getElementById('ar-canvas') as HTMLCanvasElement | null;
 
 /* -----------------------------------------------------------
    Helpers
@@ -53,134 +79,238 @@ function hideOverlay() {
   overlay?.classList.add('hidden');
 }
 
-/* -----------------------------------------------------------
-   Three.js scene setup (called once by 8th Wall)
-   ----------------------------------------------------------- */
-let rotatingCube: THREE.Mesh | null = null;
+function showError(msg: string) {
+  if (!overlay) return;
+  const spinner = overlay.querySelector('.loading-spinner');
+  if (spinner) spinner.remove();
+  const btn = overlay.querySelector('#ar-start-btn');
+  if (btn) (btn as HTMLElement).style.display = 'none';
+  const text = overlay.querySelector('.loading-text');
+  if (text) text.textContent = msg;
+}
 
-function createRotatingCube(scene: THREE.Scene) {
+/* -----------------------------------------------------------
+   Canvas — full viewport sizing + resize listener
+   ----------------------------------------------------------- */
+function setupCanvas(): () => void {
+  if (!canvas) return () => {};
+
+  const resize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  resize();
+
+  window.addEventListener('resize', resize);
+  return () => window.removeEventListener('resize', resize);
+}
+
+/* -----------------------------------------------------------
+   Three.js objects (managed by the custom pipeline module)
+   ----------------------------------------------------------- */
+let cube: THREE.Mesh | null = null;
+let isCubeVisible = false;
+
+function createCube(scene: THREE.Scene) {
+  if (cube) return;
+
+  // Geometry + material
   const geometry = new THREE.BoxGeometry(0.15, 0.15, 0.15);
   const material = new THREE.MeshStandardMaterial({
     color: 0x00ccff,
     roughness: 0.3,
     metalness: 0.6,
   });
-  const cube = new THREE.Mesh(geometry, material);
-
-  // Position cube above the image target (0, 0, 0 is the marker center)
+  cube = new THREE.Mesh(geometry, material);
   cube.position.set(0, 0.075, 0);
   scene.add(cube);
 
-  // Add a simple light so the cube is visible
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-  scene.add(ambientLight);
+  // Lighting
+  const ambient = new THREE.AmbientLight(0xffffff, 0.7);
+  scene.add(ambient);
 
-  const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-  dirLight.position.set(0.5, 1, 0.5);
-  scene.add(dirLight);
-
-  return cube;
+  const dir = new THREE.DirectionalLight(0xffffff, 1.0);
+  dir.position.set(0.5, 1, 0.5);
+  scene.add(dir);
 }
 
 /* -----------------------------------------------------------
-   Animation loop (called each frame by 8th Wall)
+   Custom pipeline module — scene visibility & animation.
+   This module is added via XR8.addPipelineModules() inside
+   the onAttach callback, so it runs AFTER the Threejs
+   pipeline module has set up the scene.
    ----------------------------------------------------------- */
-function onFrame(_frameTime: number) {
-  if (rotatingCube) {
-    rotatingCube.rotation.y += 0.02;
-    rotatingCube.rotation.x += 0.01;
-  }
-}
-
-/* -----------------------------------------------------------
-   8th Wall pipeline events
-   ----------------------------------------------------------- */
+let xrEngine: any = null;
 let cubeAdded = false;
 
-function onCameraStatusChange(evt: Record<string, unknown>) {
-  // evt.status can be: 'normal', 'limited', etc.
-  if (evt.status === 'normal') {
-    hideOverlay();
-  }
+function createImageTargetPipeline(): PipelineModule {
+  return {
+    name: 'image-target-cube',
+
+    onAttach(engine: any) {
+      xrEngine = engine;
+      // Add our module to the engine's active pipeline
+      engine.addPipelineModules([createImageTargetPipeline()]);
+    },
+
+    onDetach() {
+      xrEngine = null;
+    },
+
+    onUpdate({ frameTime }: { frameTime: number }) {
+      if (!cube || !isCubeVisible) return;
+
+      // Rotate the cube — adjust multipliers for speed
+      cube.rotation.y += 0.02;
+      cube.rotation.x += 0.01;
+    },
+  };
 }
 
-function onXrFrame() {
-  // The actual frame callback is provided by Threejs.pipelineModule()
-}
-
+/* -----------------------------------------------------------
+   Image target callbacks
+   ----------------------------------------------------------- */
 function onImageFound() {
   if (!cubeAdded) {
     const scene = XR8.Threejs.xrScene();
-    rotatingCube = createRotatingCube(scene);
+    createCube(scene);
     cubeAdded = true;
-    showStatus('¡Marcador detectado!');
   }
+  isCubeVisible = true;
+  if (cube) cube.visible = true;
+  showStatus('¡Marcador detectado!');
 }
 
 function onImageLost() {
+  isCubeVisible = false;
+  if (cube) cube.visible = false;
   showStatus('Apunta a la imagen objetivo');
+}
+
+/* -----------------------------------------------------------
+   XR8 error handler
+   ----------------------------------------------------------- */
+function onXrError(error: any) {
+  console.error('[XR8] Error:', error);
+
+  const errType = error?.type || error;
+  const errPerm = error?.permission;
+
+  if (errPerm === 'deviceorientation') {
+    showError(
+      'Permiso de orientación denegado.\n\n' +
+      'En iOS/Safari, toca "Permitir" cuando el navegador solicite acceso al giroscopio.'
+    );
+  } else if (errType === 'permission' || error === 'permission-denied' || error === 'camera-access-denied') {
+    showError(
+      'Permiso de cámara denegado.\n\n' +
+      'Permite el acceso a la cámara en la configuración de tu navegador.'
+    );
+  } else if (error === 'no-camera' || error === 'camera-not-available') {
+    showError('No se encontró una cámara disponible en este dispositivo.');
+  } else if (error === 'https-required') {
+    showError(
+      'Se requiere HTTPS para acceder a la cámara.\n\n' +
+      'Asegúrate de que la página esté servida por HTTPS.'
+    );
+  } else {
+    showError('Error al inicializar la cámara. Revisa la consola para más detalles.');
+  }
+}
+
+/* -----------------------------------------------------------
+   Device orientation permission (iOS 13+ / Safari)
+   ----------------------------------------------------------- */
+async function requestDeviceOrientationPermission() {
+  const DeviceOrientationEvent = window.DeviceOrientationEvent as any;
+  if (
+    typeof DeviceOrientationEvent !== 'undefined' &&
+    typeof DeviceOrientationEvent.requestPermission === 'function'
+  ) {
+    try {
+      const result = await DeviceOrientationEvent.requestPermission();
+      if (result !== 'granted') {
+        console.warn('[AR] Device orientation permission denied');
+      }
+    } catch (e) {
+      console.warn('[AR] Device orientation permission error:', e);
+    }
+  }
 }
 
 /* -----------------------------------------------------------
    Bootstrap
    ----------------------------------------------------------- */
-function initAR() {
-  // Wait for the 8th Wall engine to be available
+async function initAR() {
   if (typeof XR8 === 'undefined') {
-    window.addEventListener('load', () => setTimeout(initAR, 200));
+    console.error('[AR] XR8 engine not found. Is the CDN script loaded?');
+    showError('Error: motor 8th Wall no encontrado.');
     return;
   }
 
-  showStatus('Inicializando cámara…', 0);
+  if (!canvas) {
+    console.error('[AR] Canvas element #ar-canvas not found.');
+    showError('Error: canvas no encontrado en el DOM.');
+    return;
+  }
 
-  // Register pipeline modules
+  setupCanvas();
+
+  // Register the camera pipeline modules
   XR8.addCameraPipelineModules([
     XR8.GlTextureRenderer.pipelineModule(),
     XR8.Threejs.pipelineModule(),
     XR8.XrController.pipelineModule(),
   ]);
 
-  // Configure image targets
-  // Replace 'placeholder-target.jpg' with your actual target image.
-  // The asset must live in public/ so it's served at root.
+  // Configure image target tracking
   XR8.XrController.configure({
-    imageTargets: [
+    imageTargetData: [
       {
         name: 'placeholder-target',
         asset: '/placeholder-target.jpg',
-        // Approximate physical width in metres (adjust to your print size)
-        physicalWidth: 0.2,
+        physicalWidth: TARGET_PHYSICAL_WIDTH,
       },
     ],
-    // Maximum number of simultaneous targets to track
     maxTrackables: 1,
+    onImageFound,
+    onImageLost,
   });
 
-  // Start the XR8 session
-  XR8.run({
-    canvas: document.getElementById('ar-canvas') as HTMLCanvasElement,
-    // Camera permission is requested automatically by 8th Wall
-    cameraConfig: {
-      direction: 'auto',
-    },
-    // Use SLAM pipeline (already preloaded via data-preload-chunks)
-    pipelines: [],
-    // Listen for pipeline events
-    onCameraStatusChange,
-    onBeforeXrFrame: onXrFrame,
-    // Custom events for image target detection
-    listeners: {
-      'reality.imagefound': onImageFound,
-      'reality.imagelost': onImageLost,
-    },
-  });
+  // Show "Tap to Start" button — iOS requires a user gesture
+  // for deviceorientation permission.
+  const btn = document.getElementById('ar-start-btn') as HTMLElement | null;
+  if (btn) {
+    btn.style.display = 'block';
+    btn.addEventListener('click', async () => {
+      btn.style.display = 'none';
+      showStatus('Inicializando cámara…', 0);
 
-  showStatus('Apunta la cámara a la imagen objetivo');
+      // Request deviceorientation permission (required on iOS/Safari)
+      await requestDeviceOrientationPermission();
+
+      // Start the XR8 session
+      XR8.run({
+        canvas,
+        allowedDevices: XR8.XrConfig.device().ANY,
+        cameraConfig: { direction: XR8.XrConfig.camera().BACK },
+        onError: onXrError,
+      });
+    }, { once: true });
+  }
 }
 
-// Kick off when the DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initAR);
-} else {
+/* -----------------------------------------------------------
+   Wait for 8th Wall engine load, then initialize
+   ----------------------------------------------------------- */
+function onXrLoaded() {
   initAR();
+}
+
+if (typeof window !== 'undefined') {
+  if ((window as any).XR8) {
+    onXrLoaded();
+  } else {
+    window.addEventListener('xrloaded', onXrLoaded, { once: true });
+  }
 }
