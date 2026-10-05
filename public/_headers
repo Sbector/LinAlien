@@ -1,0 +1,17 @@
+# Netlify Headers for CORS and Caching
+
+/Berg.glb
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
+/Berg.usdz
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.glb
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.usdz
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
