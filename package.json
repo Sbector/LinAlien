@@ -12,12 +12,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.3.2",
-    "three": "^0.170.0"
+    "astro": "^7.3.2"
   },
-  "devDependencies": {
-    "@types/three": "^0.170.0"
-  },
+  "devDependencies": {},
   "allowScripts": {
     "esbuild": true
   }

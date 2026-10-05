@@ -3,29 +3,25 @@ import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
 ---
 
-<Layout title="WebAR — Image Target Demo">
-  <!-- Full-screen canvas where 8th Wall renders the camera feed + Three.js scene -->
-  <div id="ar-canvas-container">
-    <canvas id="ar-canvas"></canvas>
-  </div>
-
-  <!-- Loading overlay — hidden once camera is active -->
-  <div id="ar-loading-overlay">
-    <div class="loading-spinner"></div>
-    <p class="loading-text">
-      Solicitando permiso de cámara…<br />
-      Apunta a la imagen objetivo cuando esté listo!
-    </p>
-    <button id="ar-start-btn" class="ar-start-btn" style="display:none;">
-      Iniciar AR
-    </button>
-  </div>
-
-  <!-- Optional status toast -->
-  <div id="ar-status"></div>
-
-  <!-- Client-only AR experience (TypeScript) -->
-  <script>
-    import '../scripts/ar-experience.ts';
-  </script>
+<Layout title="Obra 3D / AR">
+  <model-viewer
+    src="/Berg.glb"
+    ar
+    ar-placement="floor"
+    ar-scale="fixed"
+    camera-controls
+    auto-rotate
+    poster="/poster.svg"
+    shadow-intensity="1"
+    environment-image="neutral"
+    exposure="1"
+  >
+    <div class="progress-bar" slot="progress-bar"></div>
+    <div slot="ar-prompt">
+      <p>Muévete para encontrar una superficie plana</p>
+    </div>
+    <div slot="ar-not-supported">
+      <p>Tu dispositivo no soporta AR. Puedes inspeccionar el modelo en 3D.</p>
+    </div>
+  </model-viewer>
 </Layout>
