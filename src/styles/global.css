@@ -2,7 +2,12 @@
 
 html, body { width: 100%; height: 100%; overflow: hidden; font-family: system-ui, sans-serif; }
 
-model-viewer { width: 100vw; height: 100vh; background: #f0f0f0; }
+model-viewer { 
+  width: 100vw; 
+  height: 100dvh; 
+  height: 100vh; /* fallback */
+  background: #f0f0f0; 
+}
 
 @media (prefers-color-scheme: dark) {
   model-viewer { background: #111; }
@@ -31,8 +36,8 @@ model-viewer {
 /* Custom AR Button */
 [slot="ar-button"] {
   position: absolute;
-  bottom: 1.5rem;
-  right: 1.5rem;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  right: max(1.5rem, env(safe-area-inset-right));
   z-index: 10;
 }
 
@@ -40,44 +45,47 @@ model-viewer {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.875rem 1.25rem;
-  font-size: 1rem;
-  font-weight: 600;
+  padding: 1rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
   color: #fff;
   background: #0066ff;
   border: none;
   border-radius: 9999px;
-  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.2);
+  box-shadow: 0 6px 20px rgba(0, 102, 255, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.3);
   cursor: pointer;
   transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .custom-ar-button:hover,
 .custom-ar-button:focus {
   background: #0052cc;
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 102, 255, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.3);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 102, 255, 0.6), 0 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 .custom-ar-button:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
 }
 
 .custom-ar-button svg {
   flex-shrink: 0;
+  width: 28px;
+  height: 28px;
 }
 
 .custom-ar-button:focus-visible {
-  outline: 2px solid #0066ff;
-  outline-offset: 3px;
+  outline: 3px solid #0066ff;
+  outline-offset: 4px;
 }
 
 /* Dark mode adjustments */
 @media (prefers-color-scheme: dark) {
   .custom-ar-button {
     background: #0066ff;
-    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 20px rgba(0, 102, 255, 0.6), 0 0 0 3px rgba(255, 255, 255, 0.2);
   }
   .custom-ar-button:hover,
   .custom-ar-button:focus {
