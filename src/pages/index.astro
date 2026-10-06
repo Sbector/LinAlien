@@ -5,7 +5,8 @@ import '../styles/global.css';
 
 <Layout title="Obra 3D / AR">
   <model-viewer
-    src="/Chair.glb"
+    id="model-viewer"
+    src="/Berg.glb"
     ar
     ar-modes="webxr scene-viewer quick-look"
     ar-placement="floor"
@@ -41,3 +42,15 @@ import '../styles/global.css';
     </div>
   </model-viewer>
 </Layout>
+
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js';
+  const viewer = document.getElementById('model-viewer');
+  viewer.addEventListener('load', () => {
+    const model = viewer.model;
+    if (!model) return;
+    const box = new THREE.Box3().setFromObject(model);
+    const centerY = (box.max.y + box.min.y) / 2;
+    model.position.y = -centerY;
+  });
+</script>
