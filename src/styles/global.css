@@ -27,3 +27,60 @@ model-viewer {
 @media (prefers-color-scheme: dark) {
   [slot="ar-prompt"], [slot="ar-not-supported"] { color: #ddd; }
 }
+
+/* Custom AR Button */
+[slot="ar-button"] {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+}
+
+.custom-ar-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: #0066ff;
+  border: none;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4), 0 0 0 2px rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.custom-ar-button:hover,
+.custom-ar-button:focus {
+  background: #0052cc;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 102, 255, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.3);
+}
+
+.custom-ar-button:active {
+  transform: translateY(0);
+}
+
+.custom-ar-button svg {
+  flex-shrink: 0;
+}
+
+.custom-ar-button:focus-visible {
+  outline: 2px solid #0066ff;
+  outline-offset: 3px;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .custom-ar-button {
+    background: #0066ff;
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.15);
+  }
+  .custom-ar-button:hover,
+  .custom-ar-button:focus {
+    background: #1a7aff;
+  }
+}
