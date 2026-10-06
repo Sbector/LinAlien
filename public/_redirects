@@ -1,4 +1,2 @@
-/* ============================================================
-   Netlify SPA redirect — serves index.html for all routes
-   ============================================================ */
+# Netlify SPA redirect — serves index.html for all routes
 /*    /index.html   200
