@@ -1,10 +1,10 @@
 # Netlify Headers for CORS and Caching
 
-/AlienGris.glb
+/AlienGris_CrouchIdle.glb
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=0, must-revalidate
 
-/AlienGris.usdz
+/AlienGris_CrouchIdle.usdz
   Access-Control-Allow-Origin: *
   Cache-Control: public, max-age=0, must-revalidate
 
