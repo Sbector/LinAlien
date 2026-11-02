@@ -1,48 +1,42 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
+import razas from '../data/razas.json';
+
+const tituloOficial = 'LISTA DE RAZAS EXTRATERRESTRES QUE COOPERAN CON EL COMPLEJO MILITAR E INDUSTRIAL';
+const subtituloOficial = 'ARCHIVO DE RAZAS EXTRATERRESTRES';
+const instruccion = 'SELECCIONA UNA RAZA PARA CONSULTAR SU ARCHIVO';
 ---
 
-<Layout title="Obra 3D / AR">
-  <model-viewer
-    src="/AlienGris_CrouchIdle.glb" ios-src="/AlienGris_CrouchIdle.usdz"
-    autoplay animation-name="Animation"
-    ar
-    ar-modes="webxr scene-viewer quick-look"
-    ar-placement="floor"
-    ar-scale="fixed"
-    camera-controls
-    auto-rotate
-    rotation-per-second="30deg"
-    camera-orbit="45deg 65deg auto"
-    field-of-view="45deg"
-    min-field-of-view="10deg"
-    max-field-of-view="60deg"
-    min-camera-orbit="auto 10deg auto"
-    max-camera-orbit="auto 90deg auto"
-    interaction-prompt="auto"
-    poster="/poster.svg"
-    shadow-intensity="1"
-    shadow-softness="0.5"
-    environment-image="neutral"
-    exposure="1"
-    reveal="auto"
-    loading="eager"
-  >
-    <div class="progress-bar" slot="progress-bar"></div>
-    <div slot="ar-button">
-      <button class="custom-ar-button" aria-label="Activar Realidad Aumentada">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-        </svg>
-        <span>Ver en AR</span>
-      </button>
+<Layout title="MURA · Catálogo de Razas">
+  <header class="header" role="banner">
+    <span class="header-mura">MURA</span>
+    <span class="header-exposicion">EXPOSICIÓN</span>
+    <h1 class="titulo-obra titulo-oficial">{tituloOficial}</h1>
+    <p class="subtitulo-oficial">{subtituloOficial}</p>
+  </header>
+
+  <main>
+    <div class="catalogo-grid" role="list">
+      {razas.map((raza) => (
+        <article class="tarjeta" role="listitem">
+          <a href={`/razas/${raza.slug}`} aria-label={`Ver ficha de ${raza.nombre}`}>
+            <div class="tarjeta-img-wrapper">
+              <img
+                class="tarjeta-img"
+                src={`/images/razas/${raza.slug}.png`}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <div class="tarjeta-nombre">
+              <span class="nombre-raza">{raza.nombre}</span>
+            </div>
+          </a>
+        </article>
+      ))}
     </div>
-    <div slot="ar-prompt">
-      <p>Muévete para encontrar una superficie plana</p>
-    </div>
-    <div slot="ar-not-supported">
-      <p>Tu dispositivo no soporta AR. Puedes inspeccionar el modelo en 3D con los controles:</p>
-    </div>
-  </model-viewer>
+    <p class="instruccion-catalogo">{instruccion}</p>
+  </main>
 </Layout>

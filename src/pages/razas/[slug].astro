@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/global.css';
+import razas from '../../data/razas.json';
+import { Astro } from 'astro';
+
+export async function getStaticPaths() {
+  return razas.map((raza) => ({
+    params: { slug: raza.slug },
+    props: { raza },
+  }));
+}
+
+const { raza } = Astro.props;
+const title = `MURA · ${raza.nombre}`;
+---
+
+<Layout title={title}>
+  <main class="ficha">
+    <header class="ficha-header">
+      <button class="btn-volver" onclick="history.back()" aria-label="Volver al catálogo">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M19 12H5M12 19l-7-7 7-7"></path>
+        </svg>
+        <span>VOLVER AL CATÁLOGO</span>
+      </button>
+      <div class="ficha-header-titulo">
+        <span class="ficha-mura">MURA</span>
+        <span class="ficha-exposicion">EXPOSICIÓN</span>
+      </div>
+      <div style="width: 20px;"></div>
+    </header>
+
+    <div class="ficha-img-wrapper">
+      <img
+        class="ficha-img"
+        src={`/images/razas/${raza.slug}.png`}
+        alt={`Retrato de ${raza.nombre}`}
+        loading="eager"
+        decoding="async"
+      />
+    </div>
+
+    <h1 class="nombre-raza ficha-nombre">{raza.nombre}</h1>
+
+    <div class="ficha-campos">
+      <div class="ficha-campo">
+        <span class="etiqueta ficha-campo-label">Altura de referencia para MURA</span>
+        <span class="ficha-campo-valor">{raza.alturaReferencia}</span>
+      </div>
+      <div class="ficha-campo">
+        <span class="etiqueta ficha-campo-label">Alturas atribuidas en relatos</span>
+        <span class="ficha-campo-valor">{raza.alturasRelatos}</span>
+      </div>
+      <div class="ficha-campo">
+        <span class="etiqueta ficha-campo-label">Descripción física</span>
+        <p class="ficha-descripcion">{raza.descripcionFisica}</p>
+      </div>
+      <div class="ficha-campo">
+        <span class="etiqueta ficha-campo-label">Relación atribuida con el complejo militar-industrial terrestre</span>
+        <p class="ficha-descripcion">{raza.relacionComplejo}</p>
+      </div>
+    </div>
+
+    <p class="ficha-nota">
+      Nota de contexto: las relaciones descritas proceden de relatos ufológicos y teorías conspirativas; no están demostradas científicamente. Las alturas de referencia son decisiones artísticas para el diseño de los modelos 3D.
+    </p>
+
+    <button
+      class="btn-ra"
+      id="btn-ar"
+      aria-label={`Ver a ${raza.nombre} en realidad aumentada`}
+    >
+      VER EN REALIDAD AUMENTADA
+    </button>
+
+    <model-viewer
+      id="ar-viewer"
+      src="/AlienGris_CrouchIdle.glb"
+      ios-src="/AlienGris_CrouchIdle.usdz"
+      alt={`Modelo 3D de ${raza.nombre}`}
+      auto-rotate
+      camera-controls
+      camera-orbit="45deg 65deg auto"
+      field-of-view="45deg"
+      min-field-of-view="10deg"
+      max-field-of-view="60deg"
+      min-camera-orbit="auto 10deg auto"
+      max-camera-orbit="auto 90deg auto"
+      interaction-prompt="auto"
+      poster="/poster.svg"
+      shadow-intensity="1"
+      shadow-softness="0.5"
+      environment-image="neutral"
+      exposure="1"
+      reveal="auto"
+      loading="lazy"
+      ar
+      ar-modes="webxr scene-viewer quick-look"
+      ar-placement="floor"
+      ar-scale="fixed"
+      style="display: none; position: fixed; inset: 0; width: 100%; height: 100%; z-index: 9999; background: var(--negro-carbon);"
+    >
+      <div slot="progress-bar" class="progress-bar"></div>
+      <div slot="ar-button">
+        <button class="ar-button-custom" aria-label="Activar Realidad Aumentada">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <span>VER EN AR</span>
+        </button>
+      </div>
+      <div slot="ar-prompt">
+        <p>Muévete para encontrar una superficie plana</p>
+      </div>
+      <div slot="ar-not-supported">
+        <p>Tu dispositivo no soporta AR. Puedes inspeccionar el modelo en 3D con los controles.</p>
+      </div>
+    </model-viewer>
+  </main>
+
+  <script>
+    const btnAr = document.getElementById('btn-ar');
+    const arViewer = document.getElementById('ar-viewer');
+
+    btnAr.addEventListener('click', () => {
+      arViewer.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+      arViewer.focus();
+    });
+
+    arViewer.addEventListener('click', (e) => {
+      if (e.target === arViewer) {
+        arViewer.style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && arViewer.style.display === 'block') {
+        arViewer.style.display = 'none';
+        document.body.style.overflow = '';
+        btnAr.focus();
+      }
+    });
+  </script>
+</Layout>

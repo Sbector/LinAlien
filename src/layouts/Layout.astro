@@ -3,7 +3,7 @@ interface Props {
   title?: string;
 }
 
-const { title = 'Obra 3D / AR' } = Astro.props;
+const { title = 'MURA · Archivo Extraterrestre' } = Astro.props;
 ---
 
 <!doctype html>
@@ -14,6 +14,12 @@ const { title = 'Obra 3D / AR' } = Astro.props;
     <link rel="icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#0B0D0F" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&family=Oswald:wght@500&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500&family=Oswald:wght@500&display=swap" media="print" onload="this.media='all'" />
 
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js"></script>
     <script nomodule src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer-legacy.js"></script>
