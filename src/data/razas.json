@@ -8,8 +8,8 @@
     "descripcionFisica": "Seres humanoides pequeños y delgados, con cabeza grande y calva, cráneo abovedado, ojos negros almendrados, nariz y boca pequeñas, y brazos y piernas largos y finos. Suelen representarse con piel gris o gris parduzca.",
     "relacionComplejo": "Los relatos los vinculan con supuestas abducciones humanas, experimentación biológica y genética, implantes, control mental y creación de híbridos humano-extraterrestres. Algunas versiones afirman que participaron en acuerdos secretos con el gobierno estadounidense a cambio de tecnología.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/AlienGris_CrouchIdle.glb",
+    "model3dSrcIos": "/models/AlienGris_CrouchIdle.usdz"
   },
   {
     "slug": "grises-altos",
@@ -20,8 +20,8 @@
     "descripcionFisica": "Humanoides muy altos y extremadamente delgados, de piel marfil pálido casi blanca y sin vello corporal. Presentan un cráneo grande y alargado hacia atrás, ojos negros almendrados, cuello largo, hombros estrechos y extremidades prolongadas. En MURA llevan una prenda continua, ajustada y gris oscuro, como una segunda piel mate.",
     "relacionComplejo": "Se les presenta como supervisores de los Grises pequeños y responsables de supuestas misiones diplomáticas. Los relatos les atribuyen negociaciones secretas con dirigentes humanos, intercambio de tecnología y participación en programas genéticos y de control mental. Algunas versiones sitúan esos supuestos encuentros en instalaciones militares estadounidenses durante la década de 1950.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/AlienGris.glb",
+    "model3dSrcIos": "/models/AlienGris.usdz"
   },
   {
     "slug": "reptilianos",
@@ -32,8 +32,8 @@
     "descripcionFisica": "Seres humanoides con rasgos de reptil: piel escamosa, mandíbula prominente, ojos estrechos o con pupila vertical, manos con garras y musculatura robusta. Las representaciones varían entre figuras casi humanas y entidades de aspecto claramente reptiliano.",
     "relacionComplejo": "Algunas teorías afirman que ciertos Reptilianos serían habitantes antiguos de la Tierra y que colaborarían con organizaciones humanas secretas, agencias de seguridad y corporaciones. Se les atribuye manipulación de élites políticas y financieras, encubrimiento de información y participación en supuestos proyectos subterráneos. Estas afirmaciones no están verificadas.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/AlienGris_CrouchIdle.glb",
+    "model3dSrcIos": "/models/AlienGris_CrouchIdle.usdz"
   },
   {
     "slug": "draconianos",
@@ -44,8 +44,8 @@
     "descripcionFisica": "Entidades reptilianas de gran tamaño, con cuerpo robusto, escamas, cráneo alargado, mandíbula poderosa y aspecto intimidante. Algunas versiones describen una casta de élite con alas y dimensiones mucho mayores, semejante a la imagen mitológica de un dragón.",
     "relacionComplejo": "En estas narrativas ocuparían una posición jerárquica superior y ejercerían influencia sobre otros grupos Reptilianos y los Grises altos. Se les atribuye control de recursos, manipulación de élites y conflictos humanos, además de un supuesto interés por la explotación de la Tierra. Todo ello pertenece al imaginario conspirativo.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/AlienGris_CrouchIdle.glb",
+    "model3dSrcIos": "/models/AlienGris_CrouchIdle.usdz"
   },
   {
     "slug": "sirios-sirio-b",
@@ -56,8 +56,8 @@
     "descripcionFisica": "Humanoides de apariencia relativamente humana. Las descripciones ufológicas varían en tono de piel y rasgos faciales; algunos relatos mencionan piel rojiza, beige u oscura. Para MURA se propone una figura humanoide de anatomía estilizada y rasgos distintivos propios, sin presentarlos como una descripción uniforme de todos los relatos.",
     "relacionComplejo": "Algunas narrativas les atribuyen intercambios tecnológicos secretos con agencias gubernamentales y proyectos militares clandestinos. Se les vincula con supuestas investigaciones sobre viajes en el tiempo, tecnología interdimensional y armamento avanzado. Estas afirmaciones no cuentan con corroboración fiable.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/AlienGris_CrouchIdle.glb",
+    "model3dSrcIos": "/models/AlienGris_CrouchIdle.usdz"
   },
   {
     "slug": "anunnaki",
@@ -68,7 +68,7 @@
     "descripcionFisica": "Figuras humanoides de apariencia imponente, asociadas visualmente con la iconografía de la antigua Mesopotamia. Para MURA se propone una anatomía alta y robusta, rostro solemne y vestimenta inspirada en túnicas y relieves mesopotámicos. Esta propuesta visual no debe confundirse con una descripción arqueológica demostrada de seres extraterrestres.",
     "relacionComplejo": "En narrativas modernas de origen ufológico, se les presenta como supuestos responsables de intervenir en la evolución humana y supervisar el uso de los recursos terrestres mediante élites y otras razas extraterrestres. Algunas versiones los vinculan con los Draconianos y con una presunta estructura de control planetario. La interpretación extraterrestre de los Anunnaki no está demostrada y debe distinguirse de las referencias históricas y religiosas mesopotámicas.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/AlienGris_CrouchIdle.glb",
+    "model3dSrcIos": "/models/AlienGris_CrouchIdle.usdz"
   }
 ]

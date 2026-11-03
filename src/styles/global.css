@@ -284,7 +284,8 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--gris-medio);
 }
 
-.ficha-img-wrapper {
+.ficha-img-wrapper,
+.ficha-model-wrapper {
   position: relative;
   width: 100%;
   max-width: calc(100vw - 40px);
@@ -296,10 +297,15 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--gris-muy-oscuro);
 }
 
-.ficha-img {
+.ficha-img,
+.ficha-model-wrapper model-viewer {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.ficha-model-wrapper model-viewer {
+  display: block;
 }
 
 .ficha-nombre {
@@ -381,6 +387,11 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ========== MODEL VIEWER AR ========== */
 model-viewer {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  background: var(--negro-carbon);
   --progress-bar-color: var(--gris-claro);
   --progress-bar-background: rgba(255, 255, 255, 0.15);
   --progress-bar-height: 4px;
