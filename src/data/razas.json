@@ -44,8 +44,8 @@
     "descripcionFisica": "Entidades reptilianas de gran tamaño, con cuerpo robusto, escamas, cráneo alargado, mandíbula poderosa y aspecto intimidante. Algunas versiones describen una casta de élite con alas y dimensiones mucho mayores, semejante a la imagen mitológica de un dragón.",
     "relacionComplejo": "En estas narrativas ocuparían una posición jerárquica superior y ejercerían influencia sobre otros grupos Reptilianos y los Grises altos. Se les atribuye control de recursos, manipulación de élites y conflictos humanos, además de un supuesto interés por la explotación de la Tierra. Todo ello pertenece al imaginario conspirativo.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/models/gris/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/models/gris/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/draconiano/Draconiano.glb",
+    "model3dSrcIos": "/models/draconiano/Draco.usdz"
   },
   {
     "slug": "sirios-sirio-b",
