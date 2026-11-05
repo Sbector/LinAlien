@@ -16,7 +16,7 @@ html, body {
   min-height: 100%;
   background: var(--negro-carbon);
   color: var(--blanco-calido);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-inter);
   font-size: 16px;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
@@ -24,40 +24,8 @@ html, body {
   overflow-x: hidden;
 }
 
-@font-face {
-  font-family: 'Bebas Neue';
-  src: url(https://fonts.gstatic.com/s/bebasneue/v10/JTUSjIg1_i6t8kCHKm459WlhyyTh89Y.woff2) format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Oswald';
-  src: url(https://fonts.gstatic.com/s/oswald/v53/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvgUE.woff2) format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url(https://fonts.gstatic.com/s/inter/v19/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hjp-Ek-_EeA.woff2) format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: url(https://fonts.gstatic.com/s/inter/v19/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGKYAZ9hjp-Ek-_EeA.woff2) format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
 .titulo-obra {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: var(--font-bebas);
   font-weight: 400;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -65,7 +33,7 @@ html, body {
 }
 
 .nombre-raza {
-  font-family: 'Bebas Neue', sans-serif;
+  font-family: var(--font-bebas);
   font-weight: 400;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -73,14 +41,14 @@ html, body {
 }
 
 .subtitulo, .btn-ra, .btn-volver {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-oswald);
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .etiqueta {
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-inter);
   font-weight: 500;
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -115,6 +83,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .header-mura {
+  font-family: var(--font-bebas);
   font-size: 22px;
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -122,7 +91,7 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .header-exposicion {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-oswald);
   font-weight: 500;
   font-size: 10px;
   letter-spacing: 0.2em;
@@ -138,6 +107,8 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .subtitulo-oficial {
+  font-family: var(--font-oswald);
+  font-weight: 500;
   font-size: clamp(11px, 2.5vw, 13px);
   letter-spacing: 0.15em;
   color: var(--gris-medio);
@@ -217,7 +188,7 @@ img { max-width: 100%; height: auto; display: block; }
 .instruccion-catalogo {
   display: block;
   text-align: center;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-oswald);
   font-weight: 500;
   font-size: 11px;
   letter-spacing: 0.12em;
@@ -271,12 +242,13 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .ficha-mura {
+  font-family: var(--font-bebas);
   font-size: 18px;
   letter-spacing: 0.1em;
 }
 
 .ficha-exposicion {
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-oswald);
   font-weight: 500;
   font-size: 9px;
   letter-spacing: 0.18em;
@@ -400,49 +372,48 @@ model-viewer {
 [slot="ar-button"] {
   position: absolute;
   bottom: max(1rem, env(safe-area-inset-bottom, 0px) + 0.75rem);
-  left: 50%;
-  transform: translateX(-50%);
+  right: 1rem;
   z-index: 10;
-  max-width: calc(100% - 2rem);
 }
 
 .ar-button-custom {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  font-family: 'Oswald', sans-serif;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  font-family: var(--font-oswald);
   font-weight: 500;
-  font-size: 16px;
+  font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--negro-suave);
   background: var(--gris-claro);
   border: none;
-  border-radius: 9999px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
   transition: all 0.2s ease;
 }
 
 .ar-button-custom:hover {
   background: #d0d1d1;
-  transform: translateX(-50%) translateY(-2px) scale(1.02);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .ar-button-custom:active {
   background: #b8b9b9;
-  transform: translateX(-50%) scale(0.98);
+  transform: scale(0.98);
 }
 
 .ar-button-custom:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px var(--gris-claro), 0 0 0 5px var(--negro-carbon), 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 0 3px var(--gris-claro), 0 0 0 5px var(--negro-carbon), 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
 .ar-button-custom svg {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
 }
 
 [slot="ar-prompt"],
@@ -456,6 +427,7 @@ model-viewer {
   text-align: center;
   font-size: 1rem;
   font-weight: 500;
+  font-family: var(--font-oswald);
   color: var(--negro-carbon);
   background: var(--gris-claro);
   border-radius: 16px;
@@ -464,6 +436,47 @@ model-viewer {
 
 [slot="ar-not-supported"] {
   color: var(--negro-suave);
+}
+
+[slot="poster"] {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background: var(--negro-carbon);
+  color: var(--blanco-calido);
+  z-index: 5;
+}
+
+.poster-custom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  text-align: center;
+  font-family: var(--font-oswald);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gris-medio);
+}
+
+.poster-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--gris-acero);
+  border-top-color: var(--gris-claro);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
 /* ========== RESPONSIVE ========== */
