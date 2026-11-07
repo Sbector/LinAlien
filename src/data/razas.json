@@ -8,8 +8,8 @@
     "descripcionFisica": "Seres humanoides pequeños y delgados, con cabeza grande y calva, cráneo abovedado, ojos negros almendrados, nariz y boca pequeñas, y brazos y piernas largos y finos. Suelen representarse con piel gris o gris parduzca.",
     "relacionComplejo": "Los relatos los vinculan con supuestas abducciones humanas, experimentación biológica y genética, implantes, control mental y creación de híbridos humano-extraterrestres. Algunas versiones afirman que participaron en acuerdos secretos con el gobierno estadounidense a cambio de tecnología.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/models/gris/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/models/gris/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/gris/Gris.glb",
+    "model3dSrcIos": "/models/gris/Gris.usdz"
   },
   {
     "slug": "grises-altos",
@@ -32,8 +32,8 @@
     "descripcionFisica": "Seres humanoides con rasgos de reptil: piel escamosa, mandíbula prominente, ojos estrechos o con pupila vertical, manos con garras y musculatura robusta. Las representaciones varían entre figuras casi humanas y entidades de aspecto claramente reptiliano.",
     "relacionComplejo": "Algunas teorías afirman que ciertos Reptilianos serían habitantes antiguos de la Tierra y que colaborarían con organizaciones humanas secretas, agencias de seguridad y corporaciones. Se les atribuye manipulación de élites políticas y financieras, encubrimiento de información y participación en supuestos proyectos subterráneos. Estas afirmaciones no están verificadas.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/models/gris/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/models/gris/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/reptiliano/reptiliano.glb",
+    "model3dSrcIos": "/models/reptiliano/reptiliano.usdz"
   },
   {
     "slug": "draconianos",
@@ -56,8 +56,8 @@
     "descripcionFisica": "Humanoides de apariencia relativamente humana. Las descripciones ufológicas varían en tono de piel y rasgos faciales; algunos relatos mencionan piel rojiza, beige u oscura. Para MURA se propone una figura humanoide de anatomía estilizada y rasgos distintivos propios, sin presentarlos como una descripción uniforme de todos los relatos.",
     "relacionComplejo": "Algunas narrativas les atribuyen intercambios tecnológicos secretos con agencias gubernamentales y proyectos militares clandestinos. Se les vincula con supuestas investigaciones sobre viajes en el tiempo, tecnología interdimensional y armamento avanzado. Estas afirmaciones no cuentan con corroboración fiable.",
     "imageSrc": "/images/razas/anunnaki.png",
-    "model3dSrc": "/models/gris/AlienGris_CrouchIdle.glb",
-    "model3dSrcIos": "/models/gris/AlienGris_CrouchIdle.usdz"
+    "model3dSrc": "/models/sirio/sirio.glb",
+    "model3dSrcIos": "/models/sirio/sirio.usdz"
   },
   {
     "slug": "anunnaki",
