@@ -143,6 +143,13 @@ img { max-width: 100%; height: auto; display: block; }
   transition: border-color 0.2s ease, transform 0.1s ease;
 }
 
+.tarjeta > a {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
 .tarjeta:active {
   transform: scale(0.98);
 }
@@ -156,7 +163,8 @@ img { max-width: 100%; height: auto; display: block; }
 .tarjeta-img-wrapper {
   position: relative;
   width: 100%;
-  height: 78%;
+  flex: 1 1 auto;
+  min-height: 0;
   background: var(--gris-muy-oscuro);
   overflow: hidden;
 }
@@ -165,6 +173,7 @@ img { max-width: 100%; height: auto; display: block; }
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   transition: transform 0.3s ease;
 }
 
@@ -182,7 +191,7 @@ img { max-width: 100%; height: auto; display: block; }
   text-align: center;
   background: var(--carbon);
   border-top: 1px solid var(--gris-acero);
-  min-height: 22%;
+  flex: 0 0 auto;
 }
 
 .instruccion-catalogo {
