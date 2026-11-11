@@ -20,8 +20,8 @@
     "descripcionFisica": "Humanoides muy altos y extremadamente delgados, de piel marfil pálido casi blanca y sin vello corporal. Presentan un cráneo grande y alargado hacia atrás, ojos negros almendrados, cuello largo, hombros estrechos y extremidades prolongadas. En MURA llevan una prenda continua, ajustada y gris oscuro, como una segunda piel mate.",
     "relacionComplejo": "Se les presenta como supervisores de los Grises pequeños y responsables de supuestas misiones diplomáticas. Los relatos les atribuyen negociaciones secretas con dirigentes humanos, intercambio de tecnología y participación en programas genéticos y de control mental. Algunas versiones sitúan esos supuestos encuentros en instalaciones militares estadounidenses durante la década de 1950.",
     "imageSrc": "/razas/grisAlto/grisAlto.webp",
-    "model3dSrc": "/razas/grisAlto/AlienGris.glb",
-    "model3dSrcIos": "/razas/grisAlto/AlienGris.usdz"
+    "model3dSrc": "/razas/grisAlto/grisAlto.glb",
+    "model3dSrcIos": "/razas/grisAlto/grisAlto.usdz"
   },
   {
     "slug": "reptilianos",
@@ -44,8 +44,8 @@
     "descripcionFisica": "Entidades reptilianas de gran tamaño, con cuerpo robusto, escamas, cráneo alargado, mandíbula poderosa y aspecto intimidante. Algunas versiones describen una casta de élite con alas y dimensiones mucho mayores, semejante a la imagen mitológica de un dragón.",
     "relacionComplejo": "En estas narrativas ocuparían una posición jerárquica superior y ejercerían influencia sobre otros grupos Reptilianos y los Grises altos. Se les atribuye control de recursos, manipulación de élites y conflictos humanos, además de un supuesto interés por la explotación de la Tierra. Todo ello pertenece al imaginario conspirativo.",
     "imageSrc": "/razas/draconiano/draconiano.webp",
-    "model3dSrc": "/razas/draconiano/Draconiano.glb",
-    "model3dSrcIos": "/razas/draconiano/Draconiano.usdz"
+    "model3dSrc": "/razas/draconiano/draconiano.glb",
+    "model3dSrcIos": "/razas/draconiano/draconiano.usdz"
   },
   {
     "slug": "sirios-sirio-b",
