@@ -1,5 +1,5 @@
 export const CREDITS = {
-  name: 'sbector.com',
+  name: 'sbector',
   href: 'https://sbector.com',
   label: 'desarrollado por',
   author: 'Lino Vite',
