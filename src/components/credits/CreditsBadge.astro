@@ -76,28 +76,41 @@ const uid = `credits-${Math.random().toString(36).slice(2, 9)}`;
 
   .credits-badge {
     display: inline-block;
-    padding: 0.25rem 0;
+    padding: 0.4rem 0.9rem;
     font: inherit;
     font-size: 11px;
     font-weight: 600;
     line-height: 1;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--credits-mid);
-    background: none;
-    border: 0;
+    color: var(--credits-fg);
+    background: var(--credits-surface);
+    border: 1px solid var(--credits-dim);
+    border-radius: 8px;
     cursor: pointer;
-    transition: color 0.18s ease;
+    animation: credits-pulse 3s ease-in-out infinite;
+    transition: border-color 0.18s ease, background 0.18s ease;
   }
 
   .credits-badge:hover,
   .credits-badge:focus-visible {
-    color: var(--credits-fg);
+    border-color: var(--credits-bright);
+    background: #1d2125;
   }
 
   .credits-badge:focus-visible {
     outline: 1px solid var(--credits-fg);
     outline-offset: 3px;
+  }
+
+  @keyframes credits-pulse {
+    0%,
+    100% {
+      box-shadow: 0 0 0 0 rgba(231, 232, 232, 0);
+    }
+    50% {
+      box-shadow: 0 0 10px 1px rgba(231, 232, 232, 0.22);
+    }
   }
 
   .credits-dialog {
@@ -174,6 +187,10 @@ const uid = `credits-${Math.random().toString(36).slice(2, 9)}`;
 
   @media (prefers-reduced-motion: reduce) {
     .credits-dialog[open] {
+      animation: none;
+    }
+
+    .credits-badge {
       animation: none;
     }
   }
