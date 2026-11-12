@@ -1,5 +1,6 @@
 ---
 import { Font } from 'astro:assets';
+import CreditsBadge from '../components/credits/CreditsBadge.astro';
 
 interface Props {
   title?: string;
@@ -29,5 +30,27 @@ const { title = 'MURA · Archivo Extraterrestre' } = Astro.props;
   </head>
   <body>
     <slot />
+    <footer class="site-footer">
+      <CreditsBadge />
+    </footer>
   </body>
 </html>
+
+<style>
+  .site-footer {
+    padding: 0 20px;
+    border-top: 1px solid var(--gris-muy-oscuro, #222629);
+  }
+
+  @media (max-width: 360px) {
+    .site-footer {
+      padding: 0 16px;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .site-footer {
+      padding: 0 32px;
+    }
+  }
+</style>

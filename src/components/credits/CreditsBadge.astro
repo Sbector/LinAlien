@@ -1,0 +1,316 @@
+---
+import { CREDITS } from '../../config/credits';
+
+interface Props {
+  name?: string;
+  href?: string;
+  label?: string;
+  author?: string;
+  trigger?: string;
+}
+
+const {
+  name = CREDITS.name,
+  href = CREDITS.href,
+  label = CREDITS.label,
+  author = CREDITS.author,
+  trigger = 'créditos',
+} = Astro.props;
+
+const uid = `credits-${Math.random().toString(36).slice(2, 9)}`;
+---
+
+<div class="credits-root" data-credits>
+  <button
+    class="credits-badge"
+    type="button"
+    aria-haspopup="dialog"
+    aria-controls={uid}
+    data-credits-open
+  >{trigger}</button>
+
+  <dialog
+    id={uid}
+    class="credits-dialog"
+    aria-labelledby={`${uid}-title`}
+    data-credits-dialog
+    data-credits-label={label}
+    data-credits-author={author}
+  >
+    <div class="credits-dialog__stage" data-credits-stage>
+      <h2 class="credits-sr" id={`${uid}-title`}>Créditos del sitio</h2>
+      <canvas class="credits-dialog__canvas" data-credits-canvas aria-hidden="true"></canvas>
+      <button class="credits-dialog__hit" type="button" data-credits-close aria-label="Cerrar"></button>
+      <a
+        class="credits-dialog__hit"
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-credits-link
+        data-credits-text={name}
+        aria-label={`Visitar el sitio de ${name} (se abre en una pestaña nueva)`}
+      ></a>
+    </div>
+  </dialog>
+
+  <noscript>
+    <p class="credits-noscript"><a href={href}>{trigger}</a></p>
+  </noscript>
+</div>
+
+<style>
+  .credits-root {
+    --credits-bg: #0b0d0f;
+    --credits-surface: #171a1d;
+    --credits-border: #222629;
+    --credits-fg: #f2f2f0;
+    --credits-bright: #e7e8e8;
+    --credits-mid: #a7aaad;
+    --credits-dim: #555a5e;
+
+    display: block;
+    text-align: right;
+    padding: 1rem 0;
+    font-family: ui-monospace, 'Cascadia Mono', Consolas, 'Courier New', monospace;
+  }
+
+  .credits-badge {
+    display: inline-block;
+    padding: 0.25rem 0;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--credits-mid);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    transition: color 0.18s ease;
+  }
+
+  .credits-badge:hover,
+  .credits-badge:focus-visible {
+    color: var(--credits-fg);
+  }
+
+  .credits-badge:focus-visible {
+    outline: 1px solid var(--credits-fg);
+    outline-offset: 3px;
+  }
+
+  .credits-dialog {
+    width: max-content;
+    max-width: 92vw;
+    margin: auto;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  }
+
+  .credits-dialog::backdrop {
+    background: rgba(11, 13, 15, 0.85);
+  }
+
+  .credits-dialog[open] {
+    animation: credits-pop 0.18s ease-out;
+  }
+
+  @keyframes credits-pop {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  .credits-dialog__stage {
+    position: relative;
+  }
+
+  .credits-dialog__canvas {
+    display: block;
+    pointer-events: none;
+    image-rendering: pixelated;
+  }
+
+  .credits-dialog__hit {
+    position: absolute;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  .credits-dialog__hit:focus-visible {
+    outline: none;
+  }
+
+  .credits-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .credits-noscript {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--credits-mid);
+  }
+
+  .credits-noscript a {
+    color: var(--credits-mid);
+    text-decoration: underline;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .credits-dialog[open] {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { createSurface } from './surface';
+  import { SceneDialog, type PixelPalette, type Rect } from './sceneDialog';
+
+  function init(root: HTMLElement): void {
+    const openBtn = root.querySelector<HTMLButtonElement>('[data-credits-open]');
+    const dialog = root.querySelector<HTMLDialogElement>('[data-credits-dialog]');
+    const closeBtn = root.querySelector<HTMLButtonElement>('[data-credits-close]');
+    const link = root.querySelector<HTMLAnchorElement>('[data-credits-link]');
+    const canvas = root.querySelector<HTMLCanvasElement>('[data-credits-canvas]');
+    if (!openBtn || !dialog || !closeBtn || !link || !canvas) return;
+
+    const name = (link.dataset.creditsText ?? '').trim();
+    if (!name) return;
+
+    const styles = getComputedStyle(root);
+    const read = (prop: string, fallback: string): string =>
+      styles.getPropertyValue(prop).trim() || fallback;
+
+    const palette: PixelPalette = {
+      bg: read('--credits-bg', '#0b0d0f'),
+      surface: read('--credits-surface', '#171a1d'),
+      border: read('--credits-border', '#222629'),
+      fg: read('--credits-fg', '#f2f2f0'),
+      bright: read('--credits-bright', '#e7e8e8'),
+      mid: read('--credits-mid', '#a7aaad'),
+      dim: read('--credits-dim', '#555a5e'),
+    };
+
+    const scene = new SceneDialog(palette, {
+      label: dialog.dataset.creditsLabel ?? 'desarrollado por',
+      name,
+      author: dialog.dataset.creditsAuthor ?? '',
+    });
+    const surface = createSurface(canvas, scene.width, scene.height);
+    scene.attach(surface);
+
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let raf = 0;
+
+    const loop = (t: number): void => {
+      scene.tick(t);
+      raf = requestAnimationFrame(loop);
+    };
+
+    const run = (): void => {
+      cancelAnimationFrame(raf);
+      if (reduced.matches) {
+        scene.drawStatic();
+        return;
+      }
+      raf = requestAnimationFrame(loop);
+    };
+
+    const place = (el: HTMLElement, rect: Rect, scale: number): void => {
+      el.style.left = `${Math.round(rect.x * scale)}px`;
+      el.style.top = `${Math.round(rect.y * scale)}px`;
+      el.style.width = `${Math.round(rect.w * scale)}px`;
+      el.style.height = `${Math.round(rect.h * scale)}px`;
+    };
+
+    const fit = (): void => {
+      surface.fit(window.innerWidth * 0.92, window.innerHeight * 0.9, 4);
+      const rects = scene.getHitRects();
+      place(link, rects.link, surface.scale);
+      place(closeBtn, rects.close, surface.scale);
+    };
+
+    const scramble = (): void => {
+      if (reduced.matches) {
+        scene.drawStatic();
+        return;
+      }
+      scene.scramble();
+    };
+
+    openBtn.addEventListener('click', () => {
+      fit();
+      dialog.showModal();
+      scene.scramble();
+      run();
+      closeBtn.focus();
+    });
+
+    closeBtn.addEventListener('click', () => dialog.close());
+
+    dialog.addEventListener('click', (event) => {
+      if (event.target === dialog) dialog.close();
+    });
+
+    dialog.addEventListener('close', () => {
+      cancelAnimationFrame(raf);
+      openBtn.focus();
+    });
+
+    link.addEventListener('pointerenter', () => {
+      scene.setFocus('link');
+      scramble();
+    });
+    link.addEventListener('pointerleave', () => {
+      scene.setFocus(null);
+      if (reduced.matches) scene.drawStatic();
+    });
+    link.addEventListener('focus', () => {
+      scene.setFocus('link');
+      scramble();
+    });
+    link.addEventListener('blur', () => {
+      scene.setFocus(null);
+      if (reduced.matches) scene.drawStatic();
+    });
+
+    closeBtn.addEventListener('focus', () => {
+      scene.setFocus('close');
+      if (reduced.matches) scene.drawStatic();
+    });
+    closeBtn.addEventListener('blur', () => {
+      scene.setFocus(null);
+      if (reduced.matches) scene.drawStatic();
+    });
+
+    window.addEventListener('resize', () => {
+      if (!dialog.open) return;
+      fit();
+      if (reduced.matches) scene.drawStatic();
+    });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) cancelAnimationFrame(raf);
+      else if (dialog.open) run();
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-credits]').forEach(init);
+</script>
