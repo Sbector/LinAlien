@@ -1,4 +1,7 @@
 # Netlify Headers for CORS and Caching
+# NOTE: .glb/.usdz are cached as immutable for 1 year. When replacing a model
+# with the same filename, bump the ?v= query string in src/data/razas.json
+# (e.g. model3dSrc: "/razas/x/x.glb?v=3") to force clients to fetch the new file.
 
 /textures/*
   Access-Control-Allow-Origin: *
